@@ -4,26 +4,18 @@ const DATABASE_URL = process.env.DATABASE_URL
 const MODE = process.env?.MODE
 if(!DATABASE_URL)throw new Error("no database URL")
 
-export class Database {
+export interface DatabaseInt {
+    query<T extends QueryResultRow>(sql:string,params?:any[]):Promise<QueryResult<T>>,
+    close():void
+}
+export class Database implements DatabaseInt{
     private pool:Pool
     constructor(){
         this.pool = new Pool({
             connectionString:DATABASE_URL
         })
-        if(MODE === "test"){
-            this.initSchema()
-        }
-        
     }
-    private async initSchema(): Promise<void> {
-        try {
-        const query = await fs.readFile('./schema.sql', 'utf-8');
-        await this.pool.query(query);
-        console.log(' Schema carregado com sucesso');
-        } catch (error) {
-        console.error(' Erro ao carregar schema:', error);
-        }
-    }
+  
     async query<T extends QueryResultRow>(
         sql: string, params?: any[]
     ):Promise<QueryResult<T>> {
