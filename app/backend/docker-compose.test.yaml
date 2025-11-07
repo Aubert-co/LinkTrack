@@ -1,0 +1,55 @@
+version: '3.8'
+
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment: 
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        POSTGRES_DB: ${POSTGRES_DB}
+    mem_limit: 3072m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"] 
+      interval: 5s     
+      timeout: 5s     
+      retries: 5       
+      start_period: 10s 
+
+  redis:
+    image: redis:7
+    container_name: redis_url_track
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - redis_data:/data
+
+  test:
+      image: testing-url-track
+      build:
+        context: .
+      container_name: testing_url_track
+      working_dir: /app
+      command: sh -c "npm test"
+      volumes:
+        - .:/app
+        -  /app/node_modules
+      depends_on:
+        postgres:
+          condition: service_healthy
+      environment:
+        - MODE=test
+        - POSTGRES_DB=test
+        - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+        - REDIS_URL=redis://redis:6379
+
+
+
+
+volumes:
+  redis_data:
+ 
