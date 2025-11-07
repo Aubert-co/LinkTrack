@@ -15,7 +15,9 @@
     "pg": "^8.16.3",
     "ts-node-dev": "^2.0.0"
   },
- 
+  "scripts": {
+    "start": "node dist/serve.js"
+  },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
