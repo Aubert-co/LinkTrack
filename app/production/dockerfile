@@ -1,0 +1,17 @@
+FROM node:24.0.0
+
+WORKDIR /app
+
+
+COPY package*.json ./
+
+
+RUN npm install --production
+
+COPY dist ./dist
+COPY public ./public
+
+EXPOSE 3000
+
+
+CMD ["node", "dist/server.js"]

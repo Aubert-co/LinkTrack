@@ -34,4 +34,6 @@ app.use(async(req,res)=>{
     res.redirect(302,PORTFOLIO)
 })
 
-export default app
+app.listen(process.env.PORT,()=>{
+  console.log('running')
+})
