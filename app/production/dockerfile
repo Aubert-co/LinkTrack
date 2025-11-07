@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 
 
-RUN npm install --production --omit=dev
+RUN npm ci --only=production
 
 COPY dist ./dist
 
@@ -14,4 +14,4 @@ COPY dist ./dist
 EXPOSE 3000
 
 
-CMD ["node", "./dist/serve.js"]
+CMD ["node", "dist/serve.js"]
