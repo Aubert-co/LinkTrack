@@ -4,6 +4,9 @@ import Hashids from 'hashids';
 const BASE62_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const base62 = baseX(BASE62_ALPHABET);
 
+if(!process.env.HASHID){
+    throw new Error("no .env hashid")
+}
 const hashid = new Hashids(process.env.HASHID,3)
 export function encodeId(id: number,plataform:string): string {
     const hashidEncode = hashid.encode(id)

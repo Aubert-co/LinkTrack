@@ -10,7 +10,10 @@ const base_x_1 = __importDefault(require("base-x"));
 const hashids_1 = __importDefault(require("hashids"));
 const BASE62_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const base62 = (0, base_x_1.default)(BASE62_ALPHABET);
-const hashid = new hashids_1.default('c3', 3);
+if (!process.env.HASHID) {
+    throw new Error("no .env hashid");
+}
+const hashid = new hashids_1.default(process.env.HASHID, 3);
 function encodeId(id, plataform) {
     const hashidEncode = hashid.encode(id);
     const join = hashidEncode + plataform.slice(0, 1);
