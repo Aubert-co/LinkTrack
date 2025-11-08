@@ -4,7 +4,7 @@ import Hashids from 'hashids';
 const BASE62_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const base62 = baseX(BASE62_ALPHABET);
 
-const hashid = new Hashids('c3',3)
+const hashid = new Hashids(process.env.HASHID,3)
 export function encodeId(id: number,plataform:string): string {
     const hashidEncode = hashid.encode(id)
     const join = hashidEncode + plataform.slice(0,1)
