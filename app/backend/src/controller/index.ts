@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { IService } from "../service";
 import { addAccessJob } from "../worker/producer";
-import {DB_ERROR, INVALID_URL, INVALIDE_CODE, NO_CODE, PORTFOLIO, UNKNOWN} from '../constants'
+import {DB_ERROR, NO_CODE, PORTFOLIO} from '../constants'
 import { decodeId } from "../constants/decodeUrl"
 
 export class Controller {
@@ -9,7 +9,7 @@ export class Controller {
 
     async index(req:Request,res:Response):Promise<any>{
         try{
-            await addAccessJob(null,UNKNOWN)
+            
             res.redirect(302,PORTFOLIO)
         }catch(err:unknown){
             res.redirect(302,PORTFOLIO)
@@ -28,7 +28,6 @@ export class Controller {
             
             if(!decode.vacancy_id){
                 
-                await addAccessJob(null,INVALIDE_CODE)
                 res.redirect(302,PORTFOLIO)
             
                 return 
@@ -37,7 +36,7 @@ export class Controller {
             const datas = await this.service.getLink(code)
             
             if(datas.length === 0){
-                await addAccessJob(null,INVALIDE_CODE)
+              
                 res.redirect(302,PORTFOLIO)
                 return
             }
